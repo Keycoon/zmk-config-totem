@@ -13,58 +13,211 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/pointing.h>
 
 / {
+    combos {
+        compatible = "zmk,combos";
+
+        LANGchange_combo {
+            bindings = <&kp LANG1>;
+            key-positions = <17 18>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <120>;
+            layers = <0>;
+        };
+
+        ESC_combo {
+            bindings = <&kp ESC>;
+            key-positions = <0 1>;
+            slow-release;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <120>;
+        };
+
+        TAB_combo {
+            bindings = <&kp TAB>;
+            key-positions = <10 11>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <120>;
+        };
+
+        ENTER_combo {
+            bindings = <&kp ENTER>;
+            key-positions = <16 17>;
+            require-prior-idle-ms = <120>;
+            timeout-ms = <50>;
+        };
+
+        DEL_combo {
+            bindings = <&kp DEL>;
+            key-positions = <26 27>;
+            timeout-ms = <40>;
+            require-prior-idle-ms = <120>;
+            layers = <0>;
+        };
+
+        copy {
+            bindings = <&kp LC(C)>;
+            key-positions = <12 13>;
+            timeout-ms = <50>;
+            require-prior-idle-ms = <120>;
+        };
+
+        momentary_layer_5 {
+            bindings = <&mo 5>;
+            key-positions = <20 21>;
+        };
+
+        paste {
+            bindings = <&kp LC(V)>;
+            key-positions = <12 24>;
+            timeout-ms = <50>;
+            require-prior-idle-ms = <120>;
+        };
+
+        F2_Combo {
+            bindings = <&kp F2>;
+            key-positions = <19 18>;
+            timeout-ms = <50>;
+            require-prior-idle-ms = <120>;
+            layers = <0>;
+        };
+    };
+
+    macros {
+        PW1: PW1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp NUMBER_0 &kp T &kp NUMBER_0 &kp L &kp E &kp R &kp AT_SIGN &kp N &kp C &kp E>;
+            label = "PW1";
+        };
+
+        PW2: new_macro {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp NUMBER_2 &kp NUMBER_0 &kp NUMBER_2 &kp NUMBER_2 &kp NUMBER_0 &kp NUMBER_9 &kp NUMBER_0 &kp NUMBER_1 &kp Q &kp EXCLAMATION &kp AT_SIGN &kp HASH>;
+            label = "NEW_MACRO";
+        };
+
+        PW3: PW3 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp AT_SIGN &kp E &kp L &kp V &kp H &kp X &kp K &kp D &kp L &kp A>;
+            label = "PW3";
+        };
+
+        mail: mail {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&kp O &kp F &kp F &kp I &kp C &kp E &kp D &kp E &kp P &kp O &kp T &kp DOT &kp C &kp O &kp DOT &kp K &kp R>;
+            label = "MAIL";
+        };
+    };
+
+    behaviors {
+        hr: homerow {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <130>;
+            flavor = "tap-preferred";
+        };
+
+        td1: tapdance1 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAPDANCE1";
+            #binding-cells = <0>;
+            bindings = <&PW2>, <&PW1>, <&PW3>;
+
+            tapping-term-ms = <300>;
+        };
+
+        ht: holdtap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOLDTAP";
+            bindings = <&kp>, <&kp>;
+
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <130>;
+            flavor = "tap-preferred";
+        };
+
+        td2: tapdance2 {
+            compatible = "zmk,behavior-tap-dance";
+            label = "TAPDANCE2";
+            #binding-cells = <0>;
+            bindings = <&mail>;
+            tapping-term-ms = <300>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
-        base {
+        Base {
             bindings = <
-           &kp Q  &kp W  &kp E     &kp R  &kp T    &kp Y      &kp U            &kp I          &kp O    &kp P
-           &kp A  &kp S  &kp D     &kp F  &kp G    &kp H      &kp J            &kp K          &kp L    &kp SEMI
-&kp LCTRL  &kp Z  &kp X  &kp C     &kp V  &kp B    &kp N      &kp M            &kp COMMA      &kp DOT  &kp FSLH  &kp APOS
-                         &kp LGUI  &mo 2  &mo 1    &kp SPACE  &kp RIGHT_SHIFT  &kp RIGHT_ALT
+       &ht LS(Q) Q     &ht LS(W) W       &ht LS(E) E         &ht LS(R) R  &ht LS(T) T       &kp Y          &kp U              &kp I              &ht LS(O) O  &ht LS(P) P
+       &hr LEFT_ALT A  &hr LEFT_SHIFT S  &hr LEFT_CONTROL D  &kp F        &hr LEFT_GUI G    &kp H          &kp J              &kp K              &kp L        &kp SEMI
+&mo 4  &kp Z           &kp X             &kp C               &kp V        &kp B             &kp N          &ht EXCLAMATION M  &ht AT_SIGN COMMA  &kp DOT      &ht LS(FSLH) FSLH  &ht LS(MINUS) MINUS
+                                         &mo 2               &mo 1        &kp SPACE         &kp BACKSPACE  &kp RIGHT_SHIFT    &trans
             >;
         };
 
-        nav_num {
+        NUM {
             bindings = <
-                   &kp LA(BACKSPACE)   &kp BACKSPACE  &kp UP     &kp DELETE     &kp LA(DELETE)        &kp N5      &kp N6           &kp N7       &kp N8    &kp N9
-                   &kp LA(LEFT_ARROW)  &kp LEFT       &kp DOWN   &kp RIGHT      &kp LA(RIGHT)         &kp N0      &kp N1           &kp N2       &kp N3    &kp N4
-&kp LG(BACKSPACE)  &kp LG(UP_ARROW)    &kp LG(LEFT)   &kp ENTER  &kp LG(RIGHT)  &kp LG(DOWN_ARROW)    &kp PERIOD  &kp PLUS         &kp MINUS    &kp STAR  &kp FSLH  &kp CARET
-                                                      &trans     &trans         &trans                &kp EQUAL   &kp RIGHT_SHIFT  &kp PERCENT
+        &kp TILDE  &trans          &kp UP_ARROW    &trans           &trans       &trans                       &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &ht LS(SINGLE_QUOTE) SINGLE_QUOTE
+        &trans     &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &td2         &ht LS(BACKSLASH) BACKSLASH  &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &ht LS(LEFT_BRACKET) LEFT_BRACKET
+&trans  &trans     &trans          &trans          &trans           &td1         &ht LS(EQUAL) EQUAL          &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &ht LS(RIGHT_BRACKET) RIGHT_BRACKET  &trans
+                                   &trans          &trans           &kp SPACE    &kp BACKSPACE                &kp NUMBER_0  &trans
             >;
         };
 
-        sym_func {
+        ETC {
             bindings = <
-           &kp ESC        &kp LEFT_BRACE        &kp RIGHT_BRACE        &none             &none             &kp F1   &kp F2           &kp F3   &kp F4   &kp F5
-           &kp TAB        &kp LBKT              &kp RBKT               &kp ENTER         &kp BSLH          &kp F6   &kp F7           &kp F8   &kp F9   &kp F10
-&kp GRAVE  &kp LESS_THAN  &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp GREATER_THAN  &kp UNDERSCORE    &kp F11  &kp F12          &kp F13  &kp F14  &kp F15  &kp F16
-                                                &trans                 &trans            &trans            &none    &kp RIGHT_SHIFT  &none
+        &trans  &trans              &kp LS(UP_ARROW)    &trans               &trans       &trans         &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &trans
+        &trans  &kp LS(LEFT_ARROW)  &kp LS(DOWN_ARROW)  &kp LS(RIGHT_ARROW)  &trans       &trans         &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &trans
+&trans  &trans  &trans              &trans              &trans               &trans       &trans         &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &trans  &trans
+                                    &trans              &trans               &kp SPACE    &kp BACKSPACE  &kp LS(NUMBER_0)  &trans
             >;
         };
 
-        device {
+        Function {
             bindings = <
-       &none       &kp C_BRIGHTNESS_DEC  &kp C_BRIGHTNESS_INC  &none             &none    &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-       &kp K_MUTE  &kp C_VOLUME_DOWN     &kp C_VOLUME_UP       &kp C_PLAY_PAUSE  &none    &none         &none         &none         &none         &none
-&none  &none       &none                 &none                 &none             &none    &none         &none         &none         &none         &none         &bt BT_CLR
-                                         &none                 &none             &none    &none         &none         &none
+        &trans  &trans  &trans  &trans  &trans    &trans   &kp F7   &kp F8  &kp F9  &trans
+        &trans  &trans  &trans  &trans  &trans    &kp F12  &kp F4   &kp F5  &kp F6  &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &kp F11  &kp F1   &kp F2  &kp F3  &trans  &trans
+                        &trans  &trans  &trans    &trans   &kp F10  &trans
             >;
         };
 
-        extra1 { status = "reserved"; };
+        Mouse {
+            bindings = <
+        &trans  &trans  &trans  &trans  &trans    &trans          &trans          &mmv MOVE_UP    &trans          &trans
+        &trans  &trans  &trans  &trans  &trans    &msc SCRL_LEFT  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_LEFT  &msc SCRL_RIGHT
+&trans  &trans  &trans  &trans  &trans  &trans    &trans          &trans          &trans          &trans          &trans           &trans
+                        &trans  &trans  &trans    &trans          &mkp LCLK       &mkp RCLK
+            >;
+        };
 
-        extra2 { status = "reserved"; };
-
-        extra3 { status = "reserved"; };
+        Bluetooth {
+            bindings = <
+        &trans  &trans  &trans  &trans  &trans    &trans  &trans        &trans        &trans        &trans
+        &trans  &trans  &trans  &trans  &trans    &trans  &bt BT_SEL 4  &trans        &trans        &trans
+&trans  &trans  &trans  &trans  &trans  &trans    &trans  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR  &bt BT_CLR_ALL
+                        &trans  &trans  &trans    &trans  &trans        &trans
+            >;
+        };
     };
 
     conditional_layers {
         compatible = "zmk,conditional-layers";
 
-        device {
+        Function_layer {
             if-layers = <1 2>;
             then-layer = <3>;
         };
