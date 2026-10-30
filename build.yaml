@@ -20,8 +20,8 @@
 ---
 include:
   - board: xiao_ble//zmk
-    shield: totem_left
+    shield: totem_left raw_hid_adapter 
     snippet: studio-rpc-usb-uart
   - board: xiao_ble//zmk
-    shield: totem_right
+    shield: totem_right raw_hid_adapter 
 # there is no settingsreset (needed) for the XIAO
